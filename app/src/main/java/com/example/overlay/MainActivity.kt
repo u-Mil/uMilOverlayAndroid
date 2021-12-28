@@ -86,12 +86,13 @@ class MainActivity : AppCompatActivity() {
         if(v.id == R.id.switch1){
             if(c){
                 createNotification()
+                startLayoutService()
             }else{
                 removeNotification()
             }
         }
     }
-    fun checkPermissionForOverLay(){
+    private fun checkPermissionForOverLay(){
         // SDK VERSION ( >= Marshmallow)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             // Overlay
@@ -104,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun alertDialogForOverlayPermission(){
+    private fun alertDialogForOverlayPermission(){
         var builder = AlertDialog.Builder(this)
         builder.setTitle("권한 요청").setMessage("앱을 사용하려면 '다른 앱 위에 표시(오버레이)' 권한이 필요합니다")
         builder.setPositiveButton("취소"){
@@ -137,5 +138,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun removeNotification() {
         NotificationManagerCompat.from(this).cancel(1)
+    }
+
+    private fun startLayoutService(){
+        startService(Intent(this, aService::class.java))
     }
 }
