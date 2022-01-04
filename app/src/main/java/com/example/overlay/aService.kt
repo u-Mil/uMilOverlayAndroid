@@ -43,6 +43,7 @@ class aService : Service() {
         // inflate layout_aservice.xml
         var inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         v = inflater.inflate(R.layout.layout_aservice, null)
+        v.setOnTouchListener(viewTouchListener)
         var btn1: Button = v.findViewById(R.id.btn1_aserv)
         var img1: ImageView = v.findViewById(R.id.img1_aserv)
         btn1.setOnClickListener(btnClicklistener)
@@ -51,11 +52,36 @@ class aService : Service() {
         wm.addView(v, params)
     }
 
-    private var btnClicklistener = View.OnClickListener { view ->
-        if(view.id == R.id.btn1_aserv){
+    private var btnClicklistener = View.OnClickListener { v ->
+        if(v.id == R.id.btn1_aserv){
             // do something....
             wm.removeView(v)
         }
+    }
+
+
+    private var x_val = 0.0f
+    private var y_val = 0.0f
+    private var viewTouchListener = View.OnTouchListener { v, event ->
+        if(v.id == R.id.layout_aserv){
+            when(event.action){
+                MotionEvent.ACTION_DOWN -> {
+                    x_val = v.x - event.rawX
+                    y_val = v.y - event.rawY
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    v.animate().x(event.rawX + x_val)
+                        .y(event.rawY + y_val)
+                        .setDuration(0)
+                        .start()
+                }
+                MotionEvent.ACTION_UP -> {
+
+                }
+            }
+            true
+        }
+        true
     }
 
     override fun onDestroy() {
